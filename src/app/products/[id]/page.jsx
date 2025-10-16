@@ -3,11 +3,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
-import {
-  removeProduct,
-  selectIsAuthenticated,
-} from "@/lib/redux/slices/productsSlice";
-import { productsAPI } from "@/lib/api/products";
+import { removeProduct } from "@/lib/redux/slices/productSlice";
+import { productsAPI } from "@/lib/api/product";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ErrorMessage from "@/components/ErrorMessage";
 import DeleteConfirmDialog from "@/components/DeleteConfirmDialog";
@@ -16,6 +13,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Edit, Trash2, Calendar, Tag } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { selectIsAuthenticated } from "@/lib/redux/slices/authSlice";
 
 export default function ProductDetailsPage() {
   const dispatch = useDispatch();

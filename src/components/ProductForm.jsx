@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectCategories } from "@/lib/redux/slices/productsSlice";
+import { selectCategories } from "@/lib/redux/slices/productSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -154,22 +154,24 @@ export default function ProductForm({
           {/* Product Name */}
           <div className="space-y-2">
             <Label htmlFor="name" className="text-dark">
-              Product Name <span className="text-rust">*</span>
+              Product Name <span className="text-red-600">*</span>
             </Label>
             <Input
               id="name"
               value={formData.name}
               onChange={(e) => handleChange("name", e.target.value)}
               placeholder="Enter product name"
-              className={errors.name ? "border-rust" : ""}
+              className={errors.name ? "border-red-600" : ""}
             />
-            {errors.name && <p className="text-sm text-rust">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-sm text-red-600">{errors.name}</p>
+            )}
           </div>
 
           {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="description" className="text-dark">
-              Description <span className="text-rust">*</span>
+              Description <span className="text-red-600">*</span>
             </Label>
             <Textarea
               id="description"
@@ -177,17 +179,17 @@ export default function ProductForm({
               onChange={(e) => handleChange("description", e.target.value)}
               placeholder="Enter product description"
               rows={4}
-              className={errors.description ? "border-rust" : ""}
+              className={errors.description ? "border-red-600" : ""}
             />
             {errors.description && (
-              <p className="text-sm text-rust">{errors.description}</p>
+              <p className="text-sm text-red-600">{errors.description}</p>
             )}
           </div>
 
           {/* Price */}
           <div className="space-y-2">
             <Label htmlFor="price" className="text-dark">
-              Price ($) <span className="text-rust">*</span>
+              Price ($) <span className="text-red-600">*</span>
             </Label>
             <Input
               id="price"
@@ -196,23 +198,25 @@ export default function ProductForm({
               value={formData.price}
               onChange={(e) => handleChange("price", e.target.value)}
               placeholder="0.00"
-              className={errors.price ? "border-rust" : ""}
+              className={errors.price ? "border-red-600" : ""}
             />
             {errors.price && (
-              <p className="text-sm text-rust">{errors.price}</p>
+              <p className="text-sm text-red-600">{errors.price}</p>
             )}
           </div>
 
           {/* Category */}
           <div className="space-y-2">
             <Label htmlFor="category" className="text-dark">
-              Category <span className="text-rust">*</span>
+              Category <span className="text-red-600">*</span>
             </Label>
             <Select
               value={formData.categoryId}
               onValueChange={(value) => handleChange("categoryId", value)}
             >
-              <SelectTrigger className={errors.categoryId ? "border-rust" : ""}>
+              <SelectTrigger
+                className={errors.categoryId ? "border-red-600" : ""}
+              >
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
@@ -224,14 +228,14 @@ export default function ProductForm({
               </SelectContent>
             </Select>
             {errors.categoryId && (
-              <p className="text-sm text-rust">{errors.categoryId}</p>
+              <p className="text-sm text-red-600">{errors.categoryId}</p>
             )}
           </div>
 
           {/* Images */}
           <div className="space-y-2">
             <Label className="text-dark">
-              Image URLs <span className="text-rust">*</span>
+              Image URLs <span className="text-red-600">*</span>
             </Label>
             {formData.images.map((image, index) => (
               <div key={index} className="flex gap-2">
@@ -239,14 +243,14 @@ export default function ProductForm({
                   value={image}
                   onChange={(e) => handleImageChange(index, e.target.value)}
                   placeholder="https://example.com/image.jpg"
-                  className={errors.images ? "border-rust" : ""}
+                  className={errors.images ? "border-red-600" : ""}
                 />
                 {formData.images.length > 1 && (
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => removeImageField(index)}
-                    className="border-rust/30 text-rust hover:bg-rust hover:text-light"
+                    className="border-red-600/30 text-red-600 hover:bg-red-600 hover:text-light"
                   >
                     Remove
                   </Button>
@@ -262,7 +266,7 @@ export default function ProductForm({
               Add Another Image
             </Button>
             {errors.images && (
-              <p className="text-sm text-rust">{errors.images}</p>
+              <p className="text-sm text-red-600">{errors.images}</p>
             )}
           </div>
 

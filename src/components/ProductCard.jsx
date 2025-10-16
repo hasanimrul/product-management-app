@@ -14,11 +14,11 @@ export default function ProductCard({ product, onDelete }) {
   const [imageError, setImageError] = useState(false);
 
   const handleView = () => {
-    router.push(`/products/${product.id}`);
+    router.push(`/products/${product.slug}`);
   };
 
   const handleEdit = () => {
-    router.push(`/products/edit/${product.id}`);
+    router.push(`/products/edit/${product.slug}`);
   };
 
   const handleDeleteConfirm = async () => {
@@ -27,7 +27,8 @@ export default function ProductCard({ product, onDelete }) {
   };
 
   const imageUrl =
-    product.images?.[0] || "https://via.placeholder.com/400x300?text=No+Image";
+    product.images?.[0] ||
+    "https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg";
 
   return (
     <>

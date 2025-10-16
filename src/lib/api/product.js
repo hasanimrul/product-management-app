@@ -3,7 +3,10 @@ import axiosInstance from "./axios";
 export const productsAPI = {
   getAll: async (offset = 0, limit = 10) => {
     const response = await axiosInstance.get(
-      `/products?offset=${offset}&limit=${limit}`
+      `/products?offset=${offset}&limit=${limit}&t=${Date.now()}`,
+      {
+        cache: "no-store",
+      }
     );
     return response.data;
   },

@@ -58,12 +58,12 @@ export default function AuthPage() {
     setIsLoading(true);
 
     try {
-      const response = await authAPI.login(email);
+      const response = await authAPI?.login(email);
 
       // Store token and email in Redux
       dispatch(
         setCredentials({
-          token: response.token || response.access_token,
+          token: response?.token || response?.access_token,
           email: email,
         })
       );
@@ -143,7 +143,7 @@ export default function AuthPage() {
           </form>
 
           <div className="mt-6 text-center text-sm text-dark/60">
-            <p>Use the email from your job application</p>
+            <p>Use this email: mohammadhasan.imrul@gmail.com</p>
           </div>
         </CardContent>
       </Card>

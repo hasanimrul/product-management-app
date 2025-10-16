@@ -14,9 +14,8 @@ import {
   selectLoading,
   selectError,
   selectPagination,
-  selectIsAuthenticated,
-} from "@/lib/redux/slices/productsSlice";
-import { productsAPI } from "@/lib/api/products";
+} from "@/lib/redux/slices/productSlice";
+import { productsAPI } from "@/lib/api/product";
 import { categoriesAPI } from "@/lib/api/categories";
 import ProductCard from "@/components/ProductCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -165,7 +164,13 @@ export default function ProductsPage() {
   const hasNextPage = products.length === pagination.limit;
   const hasPrevPage = pagination.offset > 0;
 
-  if (!isAuthenticated) {
+  // Before rendering anything
+  if (isAuthenticated === undefined) {
+    return <LoadingSpinner />;
+  }
+
+  if (isAuthenticated === false) {
+    router.replace("/auth");
     return null;
   }
 

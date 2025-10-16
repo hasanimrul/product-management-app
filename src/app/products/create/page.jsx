@@ -3,17 +3,14 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import {
-  addProduct,
-  setCategories,
-  selectIsAuthenticated,
-} from "@/lib/redux/slices/productsSlice";
-import { productsAPI } from "@/lib/api/products";
+import { addProduct, setCategories } from "@/lib/redux/slices/productSlice";
+import { productsAPI } from "@/lib/api/product";
 import { categoriesAPI } from "@/lib/api/categories";
 import ProductForm from "@/components/ProductForm";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { selectIsAuthenticated } from "@/lib/redux/slices/authSlice";
 
 export default function CreateProductPage() {
   const dispatch = useDispatch();
