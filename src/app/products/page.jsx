@@ -1,22 +1,5 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
-import {
-  setProducts,
-  setCategories,
-  setLoading,
-  setError,
-  removeProduct,
-  setPagination,
-  selectProducts,
-  selectLoading,
-  selectError,
-  selectPagination,
-} from "@/lib/redux/slices/productSlice";
-import { productsAPI } from "@/lib/api/product";
-import { categoriesAPI } from "@/lib/api/categories";
 import ProductCard from "@/components/ProductCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ErrorMessage from "@/components/ErrorMessage";
@@ -24,185 +7,67 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Plus, Search, ChevronLeft, ChevronRight } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import useProducts from "@/hooks/use-products";
 
 export default function ProductsPage() {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const { toast } = useToast();
+  const {
+    products,
+    loading,
+    error,
+    searchQuery,
+    setSearchQuery,
+    isSearching,
+    handleDelete,
+    handleNextPage,
+    handlePrevPage,
+    currentPage,
+    hasNextPage,
+    hasPrevPage,
+    isAuthenticated,
+    router,
+    fetchProducts,
+    pagination,
+  } = useProducts();
 
-  const products = useSelector(selectProducts);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-  const pagination = useSelector(selectPagination);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) {
-      const persistedState = localStorage.getItem("redux_state");
-      if (
-        !persistedState ||
-        !JSON.parse(persistedState).auth?.isAuthenticated
-      ) {
-        router.replace("/auth");
-      }
-    }
-  }, [isAuthenticated, router]);
-
-  // Debounce search query
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(searchQuery);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  // Fetch categories on mount
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await categoriesAPI.getAll();
-        dispatch(setCategories(data));
-      } catch (err) {
-        console.error("Failed to fetch categories:", err);
-      }
-    };
-    fetchCategories();
-  }, [dispatch]);
-
-  // Fetch products
-  const fetchProducts = useCallback(
-    async (offset = 0) => {
-      dispatch(setLoading(true));
-      try {
-        const data = await productsAPI.getAll(offset, pagination.limit);
-        dispatch(setProducts(data));
-        dispatch(setPagination({ offset, total: data.length }));
-      } catch (err) {
-        dispatch(setError(err.message));
-      }
-    },
-    [dispatch, pagination.limit]
-  );
-
-  // Search products
-  const searchProducts = useCallback(
-    async (query) => {
-      if (!query.trim()) {
-        fetchProducts(0);
-        return;
-      }
-
-      setIsSearching(true);
-      dispatch(setLoading(true));
-      try {
-        const data = await productsAPI.search(query);
-        dispatch(setProducts(data));
-        dispatch(setPagination({ offset: 0, total: data.length }));
-      } catch (err) {
-        dispatch(setError(err.message));
-      } finally {
-        setIsSearching(false);
-      }
-    },
-    [dispatch, fetchProducts]
-  );
-
-  // Initial load
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchProducts(0);
-    }
-  }, [isAuthenticated]);
-
-  // Handle search
-  useEffect(() => {
-    if (debouncedSearch !== undefined) {
-      searchProducts(debouncedSearch);
-    }
-  }, [debouncedSearch]);
-
-  const handleDelete = async (productId) => {
-    try {
-      await productsAPI.delete(productId);
-      dispatch(removeProduct(productId));
-      toast({
-        title: "Success",
-        description: "Product deleted successfully",
-        variant: "default",
-      });
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: err.message || "Failed to delete product",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleNextPage = () => {
-    const newOffset = pagination.offset + pagination.limit;
-    dispatch(setPagination({ offset: newOffset }));
-    fetchProducts(newOffset);
-  };
-
-  const handlePrevPage = () => {
-    const newOffset = Math.max(0, pagination.offset - pagination.limit);
-    dispatch(setPagination({ offset: newOffset }));
-    fetchProducts(newOffset);
-  };
-
-  const currentPage = Math.floor(pagination.offset / pagination.limit) + 1;
-  const hasNextPage = products.length === pagination.limit;
-  const hasPrevPage = pagination.offset > 0;
-
-  // Before rendering anything
   if (isAuthenticated === undefined) {
     return <LoadingSpinner />;
   }
 
   if (isAuthenticated === false) {
     router.replace("/auth");
-    return null;
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-dark mb-2">Products</h1>
-            <p className="text-dark/70">Manage your product inventory</p>
-          </div>
+      <div className="mb-8 w-full">
+        <div className="flex flex-col items-center justify- mb-6">
+          <h1 className="text-3xl font-bold text-dark mb-2">Products</h1>
+          <p className="text-dark/70">Manage your product inventory</p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 mb-6 w-full">
+          {/* Search Bar */}
+          <Card className="p-2 border-sage/20 w-full">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-dark/40" />
+              <Input
+                type="text"
+                placeholder="Search products by name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-11"
+              />
+            </div>
+          </Card>
           <Button
             onClick={() => router.push("/products/create")}
-            className="bg-sage hover:bg-sage/90 text-light cursor-pointer"
+            className="bg-sage hover:bg-sage/90 text-light cursor-pointer !h-13"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Product
           </Button>
         </div>
-
-        {/* Search Bar */}
-        <Card className="p-4 border-sage/20">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-dark/40" />
-            <Input
-              type="text"
-              placeholder="Search products by name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-11"
-            />
-          </div>
-        </Card>
       </div>
 
       {/* Error Message */}

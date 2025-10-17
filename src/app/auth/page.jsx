@@ -1,13 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
-import {
-  setCredentials,
-  selectIsAuthenticated,
-} from "@/lib/redux/slices/authSlice";
-import { authAPI } from "@/lib/api/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,74 +12,12 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Package, Loader2, AlertCircle } from "lucide-react";
+import useAuth from "@/hooks/use-auth";
 
 export default function AuthPage() {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.replace("/products");
-    }
-  }, [isAuthenticated, router]);
-
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    if (!email.trim()) {
-      setError("Email is required");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const response = await authAPI?.login(email);
-
-      // Store token and email in Redux
-      dispatch(
-        setCredentials({
-          token: response?.token || response?.access_token,
-          email: email,
-        })
-      );
-
-      // Persist to localStorage
-      const state = {
-        auth: {
-          token: response.token || response.access_token,
-          email: email,
-          isAuthenticated: true,
-        },
-      };
-      localStorage.setItem("redux_state", JSON.stringify(state));
-
-      router.push("/products");
-    } catch (err) {
-      setError(err.message || "Failed to login. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  const { email, setEmail, error, isLoading, handleSubmit } = useAuth();
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 bg-gradient-to-br from-primary via-sage to-primary">
+    <div className="min-h-lvh flex items-center justify-center p-4 bg-gradient-to-br from-primary via-sage to-primary">
       <Card className="w-full max-w-md border-sage/30 shadow-2xl">
         <CardHeader className="space-y-4 text-center">
           <div className="mx-auto w-16 h-16 bg-sage rounded-full flex items-center justify-center">
