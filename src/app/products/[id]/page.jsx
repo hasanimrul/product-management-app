@@ -111,8 +111,8 @@ export default function ProductDetailsPage() {
     );
   }
 
-  const images = product.images?.length
-    ? product.images
+  const images = product?.images?.length
+    ? product?.images
     : ["https://via.placeholder.com/600x400?text=No+Image"];
 
   return (
@@ -121,7 +121,7 @@ export default function ProductDetailsPage() {
         <Button
           variant="ghost"
           onClick={() => router.back()}
-          className="mb-4 text-sage hover:text-sage/80 hover:bg-sage/10"
+          className="mb-4 text-sage hover:text-sage/80 hover:bg-sage/10 cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Products
@@ -136,7 +136,7 @@ export default function ProductDetailsPage() {
               {!imageError ? (
                 <img
                   src={images[currentImageIndex]}
-                  alt={product.name}
+                  alt={product?.name}
                   className="w-full h-full object-cover"
                   onError={() => setImageError(true)}
                 />
@@ -165,7 +165,7 @@ export default function ProductDetailsPage() {
                 >
                   <img
                     src={image}
-                    alt={`${product.name} ${index + 1}`}
+                    alt={`${product?.name} ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </button>
@@ -180,16 +180,16 @@ export default function ProductDetailsPage() {
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <h1 className="text-4xl font-bold text-dark mb-2">
-                  {product.name}
+                  {product?.name}
                 </h1>
                 <Badge className="bg-sage text-light">
                   <Tag className="h-3 w-3 mr-1" />
-                  {product.category?.name || "Uncategorized"}
+                  {product?.category?.name || "Uncategorized"}
                 </Badge>
               </div>
             </div>
             <p className="text-5xl font-bold text-gold mb-6">
-              ${product.price?.toFixed(2) || "0.00"}
+              ${product?.price?.toFixed(2) || "0.00"}
             </p>
           </div>
 
@@ -199,7 +199,7 @@ export default function ProductDetailsPage() {
                 Description
               </h2>
               <p className="text-dark/80 leading-relaxed whitespace-pre-wrap">
-                {product.description || "No description available"}
+                {product?.description || "No description available"}
               </p>
             </CardContent>
           </Card>
@@ -213,21 +213,22 @@ export default function ProductDetailsPage() {
               <div className="flex items-center text-dark/70">
                 <Calendar className="h-4 w-4 mr-2 text-sage" />
                 <span className="text-sm">
-                  <strong>Created:</strong> {formatDate(product.createdAt)}
+                  <strong>Created:</strong> {formatDate(product?.createdAt)}
                 </span>
               </div>
 
               <div className="flex items-center text-dark/70">
                 <Calendar className="h-4 w-4 mr-2 text-sage" />
                 <span className="text-sm">
-                  <strong>Last Updated:</strong> {formatDate(product.updatedAt)}
+                  <strong>Last Updated:</strong>{" "}
+                  {formatDate(product?.updatedAt)}
                 </span>
               </div>
 
-              {product.slug && (
+              {product?.slug && (
                 <div className="text-dark/70">
                   <span className="text-sm">
-                    <strong>Slug:</strong> {product.slug}
+                    <strong>Slug:</strong> {product?.slug}
                   </span>
                 </div>
               )}
@@ -238,7 +239,7 @@ export default function ProductDetailsPage() {
           <div className="flex gap-3">
             <Button
               onClick={handleEdit}
-              className="flex-1 bg-gold hover:bg-gold/90 text-dark font-semibold"
+              className="flex-1 bg-gold hover:bg-gold/90 text-dark font-semibold cursor-pointer"
             >
               <Edit className="h-4 w-4 mr-2" />
               Edit Product
@@ -246,7 +247,7 @@ export default function ProductDetailsPage() {
             <Button
               onClick={() => setShowDeleteDialog(true)}
               variant="outline"
-              className="flex-1 border-rust text-rust hover:bg-rust hover:text-light font-semibold"
+              className="flex-1 border-rust text-rust hover:bg-rust hover:text-light font-semibold cursor-pointer"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete Product
@@ -259,7 +260,7 @@ export default function ProductDetailsPage() {
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
         onConfirm={handleDelete}
-        productName={product.name}
+        productName={product?.name}
       />
     </div>
   );

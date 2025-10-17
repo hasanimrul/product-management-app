@@ -94,7 +94,7 @@ export default function EditProductPage() {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <LoadingSpinner text="Loading product..." />
+        <LoadingSpinner text="Loading product?..." />
       </div>
     );
   }
@@ -113,7 +113,7 @@ export default function EditProductPage() {
         <Button
           variant="ghost"
           onClick={() => router.back()}
-          className="mb-4 text-sage hover:text-sage/80 hover:bg-sage/10"
+          className="mb-4 text-sage hover:text-sage/80 hover:bg-sage/10 cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back

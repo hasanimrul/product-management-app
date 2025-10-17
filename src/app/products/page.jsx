@@ -44,14 +44,12 @@ export default function ProductsPage() {
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      if (typeof window !== "undefined") {
-        const persistedState = localStorage.getItem("redux_state");
-        if (
-          !persistedState ||
-          !JSON.parse(persistedState).auth?.isAuthenticated
-        ) {
-          router.replace("/auth");
-        }
+      const persistedState = localStorage.getItem("redux_state");
+      if (
+        !persistedState ||
+        !JSON.parse(persistedState).auth?.isAuthenticated
+      ) {
+        router.replace("/auth");
       }
     }
   }, [isAuthenticated, router]);
@@ -185,7 +183,7 @@ export default function ProductsPage() {
           </div>
           <Button
             onClick={() => router.push("/products/create")}
-            className="bg-sage hover:bg-sage/90 text-light"
+            className="bg-sage hover:bg-sage/90 text-light cursor-pointer"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Product
@@ -218,7 +216,7 @@ export default function ProductsPage() {
       )}
 
       {/* Loading State */}
-      {loading && !isSearching && <LoadingSpinner />}
+      {loading && !isSearching && <LoadingSpinner text="Loading products.." />}
 
       {/* Products Grid */}
       {!loading && products.length > 0 && (
@@ -226,7 +224,7 @@ export default function ProductsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {products.map((product) => (
               <ProductCard
-                key={product.id}
+                key={product?.id}
                 product={product}
                 onDelete={handleDelete}
               />
@@ -240,7 +238,7 @@ export default function ProductsPage() {
                 variant="outline"
                 onClick={handlePrevPage}
                 disabled={!hasPrevPage}
-                className="border-sage/30 text-sage hover:bg-sage hover:text-light disabled:opacity-50"
+                className="border-sage/30 text-sage hover:bg-sage hover:text-light disabled:opacity-50 cursor-pointer"
               >
                 <ChevronLeft className="h-4 w-4 mr-2" />
                 Previous
@@ -250,7 +248,7 @@ export default function ProductsPage() {
                 variant="outline"
                 onClick={handleNextPage}
                 disabled={!hasNextPage}
-                className="border-sage/30 text-sage hover:bg-sage hover:text-light disabled:opacity-50"
+                className="border-sage/30 text-sage hover:bg-sage hover:text-light disabled:opacity-50 cursor-pointer"
               >
                 Next
                 <ChevronRight className="h-4 w-4 ml-2" />

@@ -1,11 +1,11 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 
-export default function LoadingSpinner({ text = "Loading..." }) {
+export default function LoadingSpinner({ text }) {
   return (
-    <div className="flex flex-col items-center justify-center py-12">
-      <Loader2 className="h-8 w-8 animate-spin text-sage mb-4" />
+    <div className="flex items-center justify-center gap-2 py-12">
+      <Loader className="h-8 w-8 animate-spin text-sage" />
       <p className="text-dark/70">{text}</p>
     </div>
   );

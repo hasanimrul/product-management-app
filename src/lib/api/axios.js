@@ -14,20 +14,20 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     // Get token from localStorage if available
-    if (typeof window !== "undefined") {
-      const persistedState = localStorage.getItem("redux_state");
-      if (persistedState) {
-        try {
-          const state = JSON.parse(persistedState);
-          const token = state.auth?.token;
-          if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-          }
-        } catch (error) {
-          console.error("Error parsing persisted state:", error);
+
+    const persistedState = localStorage.getItem("redux_state");
+    if (persistedState) {
+      try {
+        const state = JSON.parse(persistedState);
+        const token = state.auth?.token;
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
         }
+      } catch (error) {
+        console.error("Error parsing persisted state:", error);
       }
     }
+
     return config;
   },
   (error) => {
@@ -40,7 +40,6 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      // Server responded with error
       const errorMessage =
         error.response.data?.message ||
         error.response.data?.error ||

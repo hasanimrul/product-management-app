@@ -154,24 +154,22 @@ export default function ProductForm({
           {/* Product Name */}
           <div className="space-y-2">
             <Label htmlFor="name" className="text-dark">
-              Product Name <span className="text-red-600">*</span>
+              Product Name <span className="text-rust">*</span>
             </Label>
             <Input
               id="name"
               value={formData.name}
               onChange={(e) => handleChange("name", e.target.value)}
               placeholder="Enter product name"
-              className={errors.name ? "border-red-600" : ""}
+              className={errors.name ? "border-rust" : ""}
             />
-            {errors.name && (
-              <p className="text-sm text-red-600">{errors.name}</p>
-            )}
+            {errors.name && <p className="text-sm text-rust">{errors.name}</p>}
           </div>
 
           {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="description" className="text-dark">
-              Description <span className="text-red-600">*</span>
+              Description <span className="text-rust">*</span>
             </Label>
             <Textarea
               id="description"
@@ -179,17 +177,17 @@ export default function ProductForm({
               onChange={(e) => handleChange("description", e.target.value)}
               placeholder="Enter product description"
               rows={4}
-              className={errors.description ? "border-red-600" : ""}
+              className={errors.description ? "border-rust" : ""}
             />
             {errors.description && (
-              <p className="text-sm text-red-600">{errors.description}</p>
+              <p className="text-sm text-rust">{errors.description}</p>
             )}
           </div>
 
           {/* Price */}
           <div className="space-y-2">
             <Label htmlFor="price" className="text-dark">
-              Price ($) <span className="text-red-600">*</span>
+              Price ($) <span className="text-rust">*</span>
             </Label>
             <Input
               id="price"
@@ -198,44 +196,46 @@ export default function ProductForm({
               value={formData.price}
               onChange={(e) => handleChange("price", e.target.value)}
               placeholder="0.00"
-              className={errors.price ? "border-red-600" : ""}
+              className={errors.price ? "border-rust" : ""}
             />
             {errors.price && (
-              <p className="text-sm text-red-600">{errors.price}</p>
+              <p className="text-sm text-rust">{errors.price}</p>
             )}
           </div>
 
           {/* Category */}
           <div className="space-y-2">
             <Label htmlFor="category" className="text-dark">
-              Category <span className="text-red-600">*</span>
+              Category <span className="text-rust">*</span>
             </Label>
             <Select
               value={formData.categoryId}
               onValueChange={(value) => handleChange("categoryId", value)}
             >
-              <SelectTrigger
-                className={errors.categoryId ? "border-red-600" : ""}
-              >
+              <SelectTrigger className={errors.categoryId ? "border-rust" : ""}>
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
+                  <SelectItem
+                    className="cursor-pointer"
+                    key={category.id}
+                    value={category.id}
+                  >
                     {category.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             {errors.categoryId && (
-              <p className="text-sm text-red-600">{errors.categoryId}</p>
+              <p className="text-sm text-rust">{errors.categoryId}</p>
             )}
           </div>
 
           {/* Images */}
           <div className="space-y-2">
             <Label className="text-dark">
-              Image URLs <span className="text-red-600">*</span>
+              Image URLs <span className="text-rust">*</span>
             </Label>
             {formData.images.map((image, index) => (
               <div key={index} className="flex gap-2">
@@ -243,14 +243,14 @@ export default function ProductForm({
                   value={image}
                   onChange={(e) => handleImageChange(index, e.target.value)}
                   placeholder="https://example.com/image.jpg"
-                  className={errors.images ? "border-red-600" : ""}
+                  className={errors.images ? "border-rust" : ""}
                 />
                 {formData.images.length > 1 && (
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => removeImageField(index)}
-                    className="border-red-600/30 text-red-600 hover:bg-red-600 hover:text-light"
+                    className="border-rust/30 text-rust hover:bg-rust hover:text-light"
                   >
                     Remove
                   </Button>
@@ -261,12 +261,12 @@ export default function ProductForm({
               type="button"
               variant="outline"
               onClick={addImageField}
-              className="w-full border-sage/30 text-sage hover:bg-sage hover:text-light"
+              className="w-full border-sage/30 text-sage hover:bg-sage hover:text-light cursor-pointer"
             >
               Add Another Image
             </Button>
             {errors.images && (
-              <p className="text-sm text-red-600">{errors.images}</p>
+              <p className="text-sm text-rust">{errors.images}</p>
             )}
           </div>
 
@@ -275,7 +275,7 @@ export default function ProductForm({
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-sage hover:bg-sage/90 text-light"
+              className="flex-1 bg-sage hover:bg-sage/90 text-light cursor-pointer"
             >
               {isSubmitting ? (
                 <>

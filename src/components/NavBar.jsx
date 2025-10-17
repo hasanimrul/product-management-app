@@ -18,16 +18,14 @@ export default function Navbar() {
 
   const handleLogout = () => {
     dispatch(logout());
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("redux_state");
-    }
+    localStorage.removeItem("redux_state");
     router.push("/auth");
   };
 
   if (!isAuthenticated) return null;
 
   return (
-    <nav className="bg-white border-b border-sage/20 sticky top-0 z-50">
+    <nav className="bg-primary border-b border-sage/20 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div
@@ -48,7 +46,7 @@ export default function Navbar() {
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="text-light hover:text-gold hover:bg-sage/20"
+              className="text-light hover:text-gold hover:bg-sage/20 cursor-pointer"
             >
               <LogOut className="h-4 w-4 mr-2" />
               Logout

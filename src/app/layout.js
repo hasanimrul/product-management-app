@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-// import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/toaster";
 import StoreProvider from "@/lib/redux/storeProvider";
 import Navbar from "@/components/NavBar";
 
@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
         <StoreProvider>
           <Navbar />
           <main className="min-h-[calc(100vh-4rem)]">{children}</main>
-          {/* <Toaster /> */}
+          <Toaster />
         </StoreProvider>
       </body>
     </html>

@@ -12,18 +12,16 @@ export default function HomePage() {
 
   useEffect(() => {
     // Check localStorage for persisted auth state
-    if (typeof window !== "undefined") {
-      const persistedState = localStorage.getItem("redux_state");
-      if (persistedState) {
-        try {
-          const state = JSON.parse(persistedState);
-          if (state.auth?.isAuthenticated) {
-            router.replace("/products");
-            return;
-          }
-        } catch (error) {
-          console.error("Error parsing persisted state:", error);
+    const persistedState = localStorage.getItem("redux_state");
+    if (persistedState) {
+      try {
+        const state = JSON.parse(persistedState);
+        if (state.auth?.isAuthenticated) {
+          router.replace("/products");
+          return;
         }
+      } catch (error) {
+        console.error("Error parsing persisted state:", error);
       }
     }
 

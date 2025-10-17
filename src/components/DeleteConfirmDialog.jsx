@@ -32,12 +32,12 @@ export default function DeleteConfirmDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="border-sage/30 text-sage hover:bg-sage hover:text-light">
+          <AlertDialogCancel className="border-sage/30 text-sage hover:bg-sage hover:text-light cursor-pointer">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
-            className="bg-rust hover:bg-rust/90 text-light"
+            className="bg-rust hover:bg-rust/90 text-light cursor-pointer"
           >
             Delete
           </AlertDialogAction>

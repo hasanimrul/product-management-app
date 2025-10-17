@@ -78,7 +78,7 @@ export default function CreateProductPage() {
         <Button
           variant="ghost"
           onClick={() => router.back()}
-          className="mb-4 text-sage hover:text-sage/80 hover:bg-sage/10"
+          className="mb-4 text-sage hover:text-sage/80 hover:bg-sage/10 cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
