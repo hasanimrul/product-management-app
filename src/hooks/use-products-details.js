@@ -47,8 +47,8 @@ export default function useProductsDetails() {
 
   const handleDelete = async () => {
     try {
-      await productsAPI.delete(params.id);
-      dispatch(removeProduct(params.id));
+      await productsAPI.delete(product?.id);
+      dispatch(removeProduct(product?.id));
 
       toast({
         title: "Success",
