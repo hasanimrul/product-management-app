@@ -16,6 +16,13 @@ export const productsAPI = {
     return response.data;
   },
 
+  getByCategory: async (categoryId) => {
+    const response = await axiosInstance.get(
+      `/products?categoryId=${categoryId}`
+    );
+    return response.data;
+  },
+
   search: async (searchedText) => {
     const response = await axiosInstance.get(
       `/products/search?searchedText=${encodeURIComponent(searchedText)}`

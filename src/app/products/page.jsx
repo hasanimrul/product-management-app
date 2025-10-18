@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Plus, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import useProducts from "@/hooks/use-products";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useState } from "react";
 
 export default function ProductsPage() {
   const {
@@ -27,8 +30,10 @@ export default function ProductsPage() {
     router,
     fetchProducts,
     pagination,
+    categories,
+    handleCategoryClick,
   } = useProducts();
-
+  const [selectedCategory, setSelectedCategory] = useState("All");
   if (isAuthenticated === undefined) {
     return <LoadingSpinner />;
   }
@@ -42,7 +47,9 @@ export default function ProductsPage() {
       {/* Header */}
       <div className="mb-8 w-full">
         <div className="flex flex-col items-center justify- mb-6">
-          <h1 className="text-3xl font-bold text-dark mb-2">Products</h1>
+          <h1 className="text-3xl font-bold text-dark mb-2 text-center">
+            Showing {selectedCategory} Products
+          </h1>
           <p className="text-dark/70">Manage your product inventory</p>
         </div>
 
@@ -80,48 +87,90 @@ export default function ProductsPage() {
         </div>
       )}
 
-      {/* Loading State */}
-      {loading && !isSearching && <LoadingSpinner text="Loading products.." />}
+      {/* Products  */}
 
-      {/* Products Grid */}
-      {!loading && products.length > 0 && (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            {products.map((product) => (
-              <ProductCard
-                key={product?.id}
-                product={product}
-                onDelete={handleDelete}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
+        <div className=" col-span-1 border border-sage/20 rounded-lg p-4 max-h-max flex flex-col gap-4">
+          <h2 className="text-lg">Categories</h2>
+          <RadioGroup defaultValue="All">
+            <div className="flex items-center gap-2 ">
+              <RadioGroupItem
+                value="All"
+                id="All"
+                className="cursor-pointer"
+                onClick={() => {
+                  handleCategoryClick("");
+                  setSelectedCategory("All");
+                }}
               />
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {!searchQuery && (
-            <div className="flex justify-center items-center gap-4">
-              <Button
-                variant="outline"
-                onClick={handlePrevPage}
-                disabled={!hasPrevPage}
-                className="border-sage/30 text-sage hover:bg-sage hover:text-light disabled:opacity-50 cursor-pointer"
-              >
-                <ChevronLeft className="h-4 w-4 mr-2" />
-                Previous
-              </Button>
-              <span className="text-dark font-medium">Page {currentPage}</span>
-              <Button
-                variant="outline"
-                onClick={handleNextPage}
-                disabled={!hasNextPage}
-                className="border-sage/30 text-sage hover:bg-sage hover:text-light disabled:opacity-50 cursor-pointer"
-              >
-                Next
-                <ChevronRight className="h-4 w-4 ml-2" />
-              </Button>
+              <Label className="cursor-pointer" htmlFor="All">
+                All
+              </Label>
             </div>
-          )}
-        </>
-      )}
+            {categories.map((category) => (
+              <div key={category?.id} className="flex items-center gap-2 ">
+                <RadioGroupItem
+                  id={category?.id}
+                  value={category.name}
+                  onClick={() => {
+                    handleCategoryClick(category?.id);
+                    setSelectedCategory(category.name);
+                  }}
+                  className="cursor-pointer"
+                />
+                <Label htmlFor={category?.id} className="cursor-pointer">
+                  {category.name}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </div>
+
+        {!loading && !isSearching && products.length > 0 ? (
+          <div className="col-span-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+              {products.map((product) => (
+                <ProductCard
+                  key={product?.id}
+                  product={product}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {!searchQuery && hasNextPage && (
+              <div className="flex justify-center items-center gap-4">
+                <Button
+                  variant="outline"
+                  onClick={handlePrevPage}
+                  disabled={!hasPrevPage}
+                  className="border-sage/30 text-sage hover:bg-sage hover:text-light disabled:opacity-50 cursor-pointer"
+                >
+                  <ChevronLeft className="h-4 w-4 mr-2" />
+                  Previous
+                </Button>
+                <span className="text-dark font-medium">
+                  Page {currentPage}
+                </span>
+                <Button
+                  variant="outline"
+                  onClick={handleNextPage}
+                  disabled={!hasNextPage}
+                  className="border-sage/30 text-sage hover:bg-sage hover:text-light disabled:opacity-50 cursor-pointer"
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="col-span-3">
+            <LoadingSpinner text="Loading products.." />
+          </div>
+        )}
+      </div>
 
       {/* Empty State */}
       {!loading && products.length === 0 && (
@@ -140,7 +189,7 @@ export default function ProductsPage() {
           {!searchQuery && (
             <Button
               onClick={() => router.push("/products/create")}
-              className="bg-sage hover:bg-sage/90 text-light"
+              className="bg-sage hover:bg-sage/90 text-light cursor-pointer"
             >
               <Plus className="h-4 w-4 mr-2" />
               Create Product

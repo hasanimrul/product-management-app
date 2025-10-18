@@ -10,12 +10,12 @@ export default function ErrorMessage({ error, onRetry }) {
     <Alert variant="destructive" className="border-rust bg-rust/10">
       <AlertCircle className="h-4 w-4" />
       <AlertTitle>Error</AlertTitle>
-      <AlertDescription className="flex items-center justify-between">
+      <AlertDescription className="flex items-center justify-between ">
         <span>{error}</span>
         {onRetry && (
           <button
             onClick={onRetry}
-            className="ml-4 underline hover:no-underline"
+            className="ml-4 underline hover:no-underline cursor-pointer"
           >
             Retry
           </button>

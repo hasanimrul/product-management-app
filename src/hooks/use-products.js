@@ -12,6 +12,7 @@ import {
   selectLoading,
   selectError,
   selectPagination,
+  selectCategories,
 } from "@/lib/redux/slices/productSlice";
 import { productsAPI } from "@/lib/api/product";
 import { categoriesAPI } from "@/lib/api/categories";
@@ -23,6 +24,7 @@ export default function useProducts() {
   const { toast } = useToast();
 
   const products = useSelector(selectProducts);
+  const categories = useSelector(selectCategories);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
   const pagination = useSelector(selectPagination);
@@ -31,7 +33,8 @@ export default function useProducts() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-
+  console.log("pagination", pagination);
+  console.log("products.length", products.length);
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
@@ -119,6 +122,24 @@ export default function useProducts() {
     }
   }, [debouncedSearch]);
 
+  const handleCategoryClick = async (categoryId) => {
+    try {
+      if (categoryId) {
+        dispatch(setLoading(true));
+        const data = await productsAPI.getByCategory(categoryId);
+        dispatch(setProducts(data));
+      } else {
+        fetchProducts(0);
+      }
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: err.message || "Failed to load product",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleDelete = async (productId) => {
     try {
       await productsAPI.delete(productId);
@@ -141,12 +162,14 @@ export default function useProducts() {
     const newOffset = pagination.offset + pagination.limit;
     dispatch(setPagination({ offset: newOffset }));
     fetchProducts(newOffset);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handlePrevPage = () => {
     const newOffset = Math.max(0, pagination.offset - pagination.limit);
     dispatch(setPagination({ offset: newOffset }));
     fetchProducts(newOffset);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const currentPage = Math.floor(pagination.offset / pagination.limit) + 1;
@@ -155,6 +178,8 @@ export default function useProducts() {
 
   return {
     products,
+    handleCategoryClick,
+    categories,
     loading,
     error,
     searchQuery,
