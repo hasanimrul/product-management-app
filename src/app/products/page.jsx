@@ -89,7 +89,7 @@ export default function ProductsPage() {
 
       {/* Products  */}
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
         <div className=" col-span-1 border border-sage/20 rounded-lg p-4 max-h-max flex flex-col gap-4">
           <h2 className="text-lg">Categories</h2>
           <RadioGroup defaultValue="All">
@@ -127,8 +127,8 @@ export default function ProductsPage() {
         </div>
 
         {!loading && !isSearching && products.length > 0 ? (
-          <div className="col-span-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+          <div className="md:col-span-1 lg:col-span-2 xl:col-span-3">
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
               {products.map((product) => (
                 <ProductCard
                   key={product?.id}

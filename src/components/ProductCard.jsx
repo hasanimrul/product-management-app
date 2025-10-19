@@ -76,27 +76,27 @@ export default function ProductCard({ product, onDelete }) {
             variant="outline"
             size="sm"
             onClick={handleView}
-            className="flex-1 border-sage/30 text-sage hover:bg-sage hover:text-light cursor-pointer"
+            className="flex-1 gap-0 text-xs border-sage/30 text-sage hover:bg-sage hover:text-light cursor-pointer "
           >
-            <Eye className="h-4 w-4 mr-1" />
+            <Eye className="h-3 w-3 mr-1" />
             View
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={handleEdit}
-            className="flex-1 border-gold/30 text-gold hover:bg-gold hover:text-dark cursor-pointer"
+            className="flex-1 gap-0 text-xs border-gold/30 text-gold hover:bg-gold hover:text-dark cursor-pointer"
           >
-            <Edit className="h-4 w-4 mr-1" />
+            <Edit className="h-3 w-3 mr-1" />
             Edit
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowDeleteDialog(true)}
-            className="flex-1 border-rust/30 text-rust hover:bg-rust hover:text-light cursor-pointer"
+            className="flex-1 gap-0 text-xs border-rust/30 text-rust hover:bg-rust hover:text-light cursor-pointer"
           >
-            <Trash2 className="h-4 w-4 mr-1" />
+            <Trash2 className="h-3 w-3 mr-1" />
             Delete
           </Button>
         </CardFooter>
